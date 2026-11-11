@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#15392e">
+  <meta name="description" content="Your smarter kitchen. Track ingredients, scan food, get expiry reminders, and find meals tailored to your plate.">
+  <meta property="og:site_name" content="FART AI">
+  <meta property="og:title" content="FART AI · Your smarter kitchen">
+  <meta property="og:description" content="Your smarter kitchen. Track ingredients, scan food, get expiry reminders, and find meals tailored to your plate.">
+  <title>FART AI · Your smarter kitchen</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="refresh.css">
+  <script data-app-src="catalog.js" defer></script>
+  <script data-app-src="reference-data.js" defer></script>
+  <script data-app-src="meal-labels.js" defer></script>
+  <script data-app-src="vision.js" defer></script>
+  <script data-app-src="core.js" defer></script>
+  <script data-app-src="vision/qrcode.js" defer></script>
+  <script data-app-src="profiles.js" defer></script>
+  <script data-app-src="app.js" defer></script>
+  <script data-app-src="dashboard.js" defer></script>
+  <script data-app-src="food-search.js" defer></script>
+  <script data-app-src="scan.js" defer></script>
+  <script src="storage.js" defer></script>
+</head>
+<body>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-fridge" viewBox="0 0 24 24">
+      <rect x="5" y="2.5" width="14" height="18.5" rx="3"/>
+      <path d="M5 9.5h14M9 6v1M9 13v3M8 21v1.5m8-1.5v1.5"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24">
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12a2.2 2.2 0 0 0 4 0"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="M12 2c.7 6.1 3.2 8.7 9 10-5.8 1.3-8.3 3.9-9 10-.7-6.1-3.2-8.7-9-10 5.8-1.3 8.3-3.9 9-10Z"/>
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18m-12 5h2m3 0h2"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4c-5 1-10 0-13 4-3 4-.7 9 4 9 5 0 8-5 9-13ZM4 20l9-9"/></symbol>
+    <symbol id="i-tomato" viewBox="0 0 24 24">
+      <path d="M12 8c-5.4-2.5-9 1-9 5.5A7 7 0 0 0 10 21h4a7 7 0 0 0 7-7.5C21 9 17.4 5.5 12 8Zm0 0V4m0 4-4-2m4 2 4-2"/>
+    </symbol>
+    <symbol id="i-egg" viewBox="0 0 24 24"><path d="M12 3c-3.5 0-7 7-7 11a7 7 0 1 0 14 0c0-4-3.5-11-7-11Z"/></symbol>
+    <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4 6h16m-15 0 2 14h10l2-14M6 3h12m-9 10h6"/></symbol>
+    <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0Zm3-3c0-2 2-2 2-4m4 4c0-2 2-2 2-4m4 4c0-2 2-2 2-4"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M3 7h18M8 7V4h8v3m-6 5h4"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 6h4l1.5-2h5L16 6h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6m-6 4h6m-6 4h4"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="header-inner page-width">
+      <a class="brand" href="#fridge" aria-label="FART AI home">
+        <span class="brand-icon"><svg class="icon" aria-hidden="true"><use href="#i-fridge"></use></svg></span>
+        <span><strong>FART AI</strong><small>Food Analysis and Recommendation Technology</small></span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="#fridge" data-view="fridge" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-fridge"></use></svg> My kitchen</a>
+        <a href="#shopping" data-view="shopping"><svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg> Shopping &amp; memory</a>
+        <a href="#method" data-view="method"><svg class="icon" aria-hidden="true"><use href="#i-spark"></use></svg> How it works</a>
+      </nav>
+      <div class="sidebar-note"><span class="sidebar-note-icon">✳</span><strong>A little less waste.<br>A lot more possibility.</strong><p>Because your fridge should always have something to say.</p><span class="demo-tag">STUDENT PROJECT · DEMO</span></div>
+      <button id="text-size" class="text-size" type="button" aria-pressed="false"><span aria-hidden="true">A+</span> Larger text</button>
+    </div>
+  </header>
+
+  <main id="main" class="page-width" tabindex="-1">
+    <div class="workspace-topbar"><div><p class="eyebrow">YOUR SMARTER KITCHEN</p><p class="welcome-text" id="welcome-text">Welcome back, Babatunda.</p></div><div class="user-control"><span class="avatar sage" id="active-avatar">BA</span><div><label for="profile-switcher">Demo profile</label><select id="profile-switcher" aria-label="Switch demo user"></select></div></div></div>
+    <div id="fridge-view">
+      <section class="hero" aria-labelledby="fridge-title">
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow"><span class="signal-dot"></span> FRESH THINKING, EVERY DAY</p>
+          <h1 id="fridge-title" tabindex="-1">Good food.<br><span>Better decisions.</span></h1>
+          <p class="hero-description">A fridge that gets you. Save your ingredients, find your next meal, and make every bite count.</p>
+          <div class="hero-actions">
+            <button class="button hero-secondary" id="add-food" type="button"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg> Add manually</button>
+            <button class="button primary" type="button" data-open-scan><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg> Scan food</button>
+            <button class="button hero-secondary" type="button" id="open-food-catalogue">Food catalogue</button>
+          </div>
+        </div>
+        <div class="hero-visual"><img src="images/fresh-bowl.jpg" alt="A colourful bowl of fresh vegetables and grains" class="hero-photo"><span class="hero-photo-label"><svg class="icon" aria-hidden="true"><use href="#i-leaf"></use></svg> Fresh ideas. Less waste.</span></div>
+      </section>
+
+      <section class="overview-stats" id="overview-stats" aria-label="Your kitchen at a glance"></section>
+      <section class="profile-section" aria-labelledby="profile-heading"><div class="section-heading"><div><p class="eyebrow">A KITCHEN FOR EVERYONE</p><h2 id="profile-heading">Different people. Different plates.</h2></div><span class="meta">Fictional demo profiles · saved to your kitchen</span></div><div class="profile-rail" id="profile-rail"></div><div class="diet-panel" id="diet-panel"></div></section>
+      <section class="demo-clock" aria-label="Demo clock">
+        <div class="clock-label">
+          <span class="clock-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg></span>
+          <div><span class="eyebrow">DEMO DATE</span> <strong id="demo-date"></strong></div>
+        </div>
+        <div class="clock-actions">
+          <button type="button" class="button quiet" id="advance-day">Advance 1 day</button>
+          <button type="button" class="button quiet" id="advance-month">Advance 30 days</button>
+          <button type="button" class="button text-button" id="reset-demo">Reset demo</button>
+        </div>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="card inventory-card" aria-labelledby="inventory-title">
+          <div class="card-heading">
+            <span class="section-icon fridge-icon"><svg class="icon" aria-hidden="true"><use href="#i-fridge"></use></svg></span>
+            <div><p class="eyebrow">USE IT. DON’T LOSE IT.</p><h2 id="inventory-title" tabindex="-1">Inside your fridge</h2></div>
+            <span class="counter" id="inventory-count"></span>
+          </div>
+          <div class="settings">
+            <div><label for="preference">Food preference</label>
+              <select id="preference"><option value="any">Any food</option><option value="fruit">Fruit</option><option value="vegetable">Vegetables</option><option value="dairy">Dairy</option><option value="protein">Protein foods</option><option value="pantry">Pantry staples</option></select>
+            </div>
+            <div><label for="nutrition-goal">Nutrition goal</label>
+              <select id="nutrition-goal"><option value="fiber">More fibre</option><option value="protein">More protein</option></select>
+            </div>
+          </div>
+          <p class="ranking-key"><span class="badge rank-red">Low</span><span class="badge rank-yellow">Good</span><span class="badge rank-green">Very good</span><span>Low items have higher priority to use next</span></p>
+          <ul id="inventory" class="inventory-list"></ul>
+        </section>
+
+        <aside class="dashboard-side">
+          <section class="card" aria-labelledby="reminders-title">
+            <div class="card-heading">
+              <span class="section-icon alert-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"></use></svg></span>
+              <div><p class="eyebrow">A FRIENDLY HEADS-UP</p><h2 id="reminders-title">Expiry reminders</h2></div>
+              <span class="counter" id="reminder-count"></span>
+            </div>
+            <ul id="reminders" class="reminder-list"></ul>
+          </section>
+          <section class="card" aria-labelledby="takeout-title">
+            <div class="card-heading">
+              <span class="section-icon recipe-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"></use></svg></span>
+              <div><p class="eyebrow">FRESHLY LOGGED</p><h2 id="takeout-title">Latest take-out</h2></div>
+            </div>
+            <div id="latest-takeout"></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <section id="meal-section" class="meal-section" aria-labelledby="meal-heading"><div class="section-heading"><div><p class="eyebrow">MADE FOR YOUR PROFILE</p><h2 id="meal-heading">Something good is on the menu.</h2></div><span class="meta">Measured ingredients. Practical ideas.</span></div><div class="meal-grid" id="meal-grid"></div><p class="meal-note">Nutrition estimates are calculated from the listed ingredient weights. Weigh rice and lentils dry; other ingredients use edible weights before cooking. These are meal ideas, not a complete daily meal plan.</p></section>
+    <div id="shopping-view" hidden>
+      <header class="method-hero">
+        <p class="eyebrow hero-eyebrow"><span class="signal-dot"></span> RESTOCK AND RECOGNIZE</p>
+        <h1 id="shopping-title" tabindex="-1">Shopping &amp; memory</h1>
+        <p>Review what you’re out of and see which foods the fridge remembers.</p>
+      </header>
+      <div class="method-grid shopping-grid">
+        <section class="card" aria-labelledby="buy-title">
+          <div class="card-heading">
+            <span class="section-icon recipe-icon"><svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg></span>
+            <div><p class="eyebrow">MISSING FROM THE FRIDGE</p><h2 id="buy-title">To buy</h2></div>
+            <span class="counter" id="shopping-count"></span>
+          </div>
+          <p class="card-intro">Combines foods taken out and frequent foods that are missing.</p>
+          <ul class="shopping-list" id="shopping-list"></ul>
+          <div class="actions shopping-actions">
+            <button class="button solid" id="copy-list" type="button">Copy shopping list</button>
+            <button class="button quiet" id="qr-list" type="button">Show list QR</button>
+            <button class="button quiet" id="share-list" type="button" hidden>Share to device</button>
+          </div>
+          <p class="field-note">Copy it into a note or message you can open on your phone.</p>
+          <div id="copy-fallback" hidden>
+            <label for="copy-text">Shopping list text</label>
+            <textarea id="copy-text" rows="5" readonly></textarea>
+          </div>
+        </section>
+        <section class="card" aria-labelledby="memory-title">
+          <div class="card-heading">
+            <span class="section-icon fridge-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg></span>
+            <div><p class="eyebrow">USAGE OVER 30 DAYS</p><h2 id="memory-title">Recurring foods</h2></div>
+          </div>
+          <p class="card-intro">Two or more take-outs make a food frequent. Frequent entries remember company and weight for next time.</p>
+          <ul class="shopping-list" id="recurring-list"></ul>
+          <div class="memory-review" id="memory-review"></div>
+        </section>
+      </div>
+    </div>
+
+    <div id="method-view" hidden>
+      <header class="method-hero">
+        <p class="eyebrow hero-eyebrow"><span class="signal-dot"></span> PROJECT WALKTHROUGH</p>
+        <h1 id="method-title" tabindex="-1">How FART AI works</h1>
+        <p>Follow one ingredient from the camera to Babatunda’s meal and grocery list. The large text option helps make the demo easier to read.</p>
+      </header>
+      <ol class="pipeline" aria-label="User workflow">
+        <li><span class="step-number">01</span><p class="eyebrow">INPUT</p><h2>Log food</h2><p>Type the details, search the catalogue, scan a package label or photograph the food.</p></li>
+        <li><span class="step-number">02</span><p class="eyebrow">AI METHOD</p><h2>Identify and rank</h2><p>Read package text with OCR, or suggest a fruit, vegetable or dish from a photo. Confirm the food, then rank it by date, preference, nutrition and prep time.</p></li>
+        <li><span class="step-number">03</span><p class="eyebrow">OUTPUT</p><h2>Take food out</h2><p>Match the removed food to a recipe and calculate its macros for the weight entered.</p></li>
+        <li><span class="step-number">04</span><p class="eyebrow">MEMORY</p><h2>Restock and learn</h2><p>Remove the food from the fridge, add it to the shopping list and update its usage count.</p></li>
+      </ol>
+      <div class="method-grid">
+        <section class="card method-card" aria-labelledby="score-rules-title">
+          <p class="eyebrow">EXPLAINABLE SCORE</p><h2 id="score-rules-title">Four parts, 100 points</h2>
+          <dl class="date-rules score-rules">
+            <div><dt>Expiry · 40</dt><dd>Subtract 40 on the reminder date, reducing the deduction by 6 per day remaining, down to 0.</dd></div>
+            <div><dt>Preference · 20</dt><dd>20 for a preferred group. Any food gives 10 to all foods.</dd></div>
+            <div><dt>Nutrition · 20</dt><dd>Fibre earns 4 points per gram per 100 g. Protein earns 2. Cap either goal at 20 points.</dd></div>
+            <div><dt>Prep time · 20</dt><dd>20 for 10 min or less, 10 for 11 to 20 min, and 0 for longer.</dd></div>
+          </dl>
+          <p>Start at 100 and subtract the four parts above. Lower scores mean higher priority to use next; more days remaining means more points for the same food. Scores of 0–30 are red (Low), 31–55 are yellow (Good), and 56–100 are green (Very good). Items with the lowest scores appear first.</p>
+        </section>
+        <section class="card method-card" aria-labelledby="data-title">
+          <p class="eyebrow">DATA AND LIMITS</p><h2 id="data-title">Where the values come from</h2>
+          <p>The catalogue includes the USDA FoodData Central SR Legacy records. Choose the entry that matches the ingredient and its preparation. Each macro is multiplied by the food’s weight in grams and divided by 100.</p>
+          <p>The app uses the date from the label when provided. For covered foods with a missing date, it calculates a reminder using the stored-since date and a published refrigerator storage window. This date is a planning estimate for properly stored food. Follow the package’s storage directions.</p>
+          <p id="sources"></p>
+        </section>
+      </div>
+      <section class="card walkthrough" aria-labelledby="walkthrough-title">
+        <div>
+          <p class="eyebrow">SUCCESSFUL TRIAL RUN</p><h2 id="walkthrough-title">From camera to shopping list</h2>
+          <p>Reset the sample fridge before presenting. Use the sample label image or show the printed label to a camera.</p>
+          <div class="actions">
+            <button class="button solid" type="button" data-open-scan>Open scanner</button>
+            <button class="button quiet" type="button" data-open-label>Show demo label</button>
+          </div>
+        </div>
+        <ol>
+          <li><strong>Add manually.</strong> Type a name, company and weight. Enter a date or use a sourced estimate when available.</li>
+          <li><strong>Scan in a banana.</strong> Hold the demo label in view or choose Try sample label. Its name, company, 120 g and date appear automatically in the fridge.</li>
+          <li><strong>Take it out.</strong> Select Take out on Banana, or scan the same label with Take out selected. Check the recipe, protein, fibre, carbs and fat. The banana disappears from the fridge.</li>
+          <li><strong>Check shopping and memory.</strong> Banana appears on To buy and gains a use in Recurring foods. Copy the list. Advance 30 days to show how the memory review clears inactive and one-off entries.</li>
+        </ol>
+      </section>
+      <section class="card python-card" aria-labelledby="python-title">
+        <p class="eyebrow">PYTHON INPUT PATH</p><h2 id="python-title">One list of dictionaries</h2>
+        <p>The Python example prompts for the four fields and appends a dictionary to the inventory. The browser prototype displays the same fields.</p>
+        <pre><code>inventory = []
+food = {
+    "name": input("Food name: "),
+    "company": input("Company or brand: "),
+    "quantity_g": float(input("Weight in grams: ")),
+    "expiration_date": input("Date (YYYY-MM-DD): "),
+}
+inventory.append(food)</code></pre>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-width footer">
+    <span><strong>FART AI</strong> · Introduction to Artificial Intelligence</span>
+    <span>Yossef Ahmed · Qumber Haider · Takunda Mateuso</span>
+  </footer>
+
+  <dialog id="food-dialog" aria-labelledby="food-dialog-title">
+    <form id="food-form" class="dialog-content">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">FRIDGE INPUT</p><h2 id="food-dialog-title">Add food manually</h2></div>
+        <button class="icon-button" type="button" data-close aria-label="Close food form"><svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg></button>
+      </div>
+      <label for="food-name">Food name</label>
+      <input id="food-name" name="name" placeholder="e.g. Banana" list="food-examples" maxlength="300" required autofocus>
+      <datalist id="food-examples"></datalist>
+      <p id="memory-hint" class="memory-hint" hidden></p>
+      <p id="scan-review-note" class="field-note" hidden></p>
+      <label for="food-company">Company or brand</label>
+      <input id="food-company" name="company" placeholder="e.g. FART Demo Farm or Unbranded" maxlength="70" required>
+      <label for="food-quantity">Quantity in grams</label>
+      <input id="food-quantity" name="quantity_g" type="number" placeholder="e.g. 120" min="1" max="50000" step="0.1" required aria-describedby="weight-hint">
+      <p id="weight-hint" class="field-note">Use the edible weight to calculate macros.</p>
+      <label for="food-date">Expiration or use-by date <span class="optional">optional</span></label>
+      <input id="food-date" name="expiration_date" type="date" min="1900-01-01" max="2199-12-31" aria-describedby="date-hint">
+      <p id="date-hint" class="field-note"></p>
+      <label for="stored-since">Refrigerated since</label>
+      <input id="stored-since" type="date" min="1900-01-01" max="2199-12-31" required>
+      <div class="dialog-actions">
+        <button class="button quiet" type="button" data-close>Cancel</button>
+        <button class="button solid" type="submit">Save food</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="catalogue-dialog" class="wide-dialog" aria-labelledby="catalogue-title">
+    <div class="dialog-content">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">USDA FOODDATA CENTRAL</p><h2 id="catalogue-title">Food catalogue</h2></div>
+        <button class="icon-button" type="button" data-close aria-label="Close food catalogue"><svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg></button>
+      </div>
+      <p class="card-intro">Choose the closest match, including how the food was prepared. Each entry has its own nutrition record.</p>
+      <p id="catalogue-photo-note" class="memory-hint" hidden></p>
+      <button type="button" id="catalogue-photo-name" class="button text-button" hidden>Use photo name</button>
+      <div class="catalogue-filters">
+        <div><label for="catalogue-query">Search foods</label><input id="catalogue-query" type="search" placeholder="e.g. cooked rice, olive oil" maxlength="160" autocomplete="off"></div>
+        <div><label for="catalogue-group">Food group</label><select id="catalogue-group">
+          <option value="any">All foods</option><option value="fruit">Fruit</option><option value="vegetable">Vegetables</option>
+          <option value="dairy">Dairy</option><option value="protein">Protein foods</option><option value="pantry">Pantry and prepared foods</option>
+        </select></div>
+      </div>
+      <p id="catalogue-count" class="field-note" role="status"></p>
+      <ul id="catalogue-results" class="catalogue-results"></ul>
+    </div>
+  </dialog>
+
+  <dialog id="scan-dialog" class="wide-dialog" aria-labelledby="scan-title">
+    <div class="dialog-content">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">POINT. SCAN. CONFIRM.</p><h2 id="scan-title">Scan food</h2></div>
+        <button class="icon-button" type="button" data-close aria-label="Close scanner"><svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg></button>
+      </div>
+      <div class="scan-settings">
+        <div><label for="scan-action">Scan action</label><select id="scan-action"><option value="add">Add to fridge</option><option value="take">Take out</option></select></div>
+        <div><label for="scan-mode">What to scan</label><select id="scan-mode"><option value="produce">Fruit or vegetable</option><option value="label">Printed package label</option><option value="meal">Meal or snack photo</option></select></div>
+      </div>
+      <div class="scan-stage">
+        <video id="camera" autoplay muted playsinline hidden></video>
+        <img id="scan-photo" alt="Image being analyzed" hidden>
+        <div id="scan-placeholder"><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg><p>Hold a banana, apple or another food in the centre.</p></div>
+      </div>
+      <div class="scan-guidance" id="scan-guidance"><span>1. Choose your scan type</span><span>2. Start camera or choose photo</span><span>3. Confirm the food</span></div>
+      <p id="scan-status" class="scan-status" role="status">Fruit and vegetable scanning is ready. Start the camera or choose a photo.</p>
+      <div id="scan-options" class="scan-options" hidden>
+        <div id="scan-choices" class="actions"></div>
+        <button id="scan-manual" class="button text-button" type="button">Enter food manually</button>
+      </div>
+      <div id="produce-demo" class="produce-demo" hidden>
+        <label for="produce-sample">Sample photo</label>
+        <select id="produce-sample"><option value="cucumber">Cucumber</option><option value="banana">Banana</option></select>
+      </div>
+      <label class="auto-capture"><input type="checkbox" id="auto-capture" checked> Automatically capture after 4 seconds <span class="meta">Camera only</span></label>
+      <div class="actions scan-actions">
+        <button id="start-camera" class="button solid" type="button">Start camera</button>
+        <button id="capture-camera" class="button solid" type="button" hidden>Scan now</button>
+        <button id="stop-camera" class="button quiet" type="button" hidden>Stop camera</button>
+        <label class="button quiet file-button" for="photo-input">Choose photo</label><input id="photo-input" class="visually-hidden" type="file" accept="image/*">
+        <button id="sample-scan" class="button quiet" type="button">Try sample label</button>
+      </div>
+      <p class="field-note">Your photos stay in your browser. For a banana, use Fruit or vegetable. For packaging, choose Printed package label. Check the suggested food and weight before saving.</p>
+      <details class="scan-coverage"><summary id="scan-coverage-summary">Supported foods</summary><p id="scan-produce-list" class="field-note"></p><p class="field-note">Meal photo mode suggests dishes and snacks. Package label mode reads English and German. Choose a catalogue record for nutrition.</p></details>
+    </div>
+  </dialog>
+
+  <dialog id="label-dialog" aria-labelledby="label-title">
+    <div class="dialog-content">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">CAMERA TRIAL</p><h2 id="label-title">Demo package label</h2></div>
+        <button class="icon-button" type="button" data-close aria-label="Close demo label"><svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg></button>
+      </div>
+      <p class="card-intro">Print this fictional label or open it on a second screen. Hold it in front of the camera and read the frame.</p>
+      <img id="demo-label" alt="Demo banana label with name, company, weight and use-by date">
+      <div class="dialog-actions"><button id="print-label" class="button solid" type="button">Print label</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="detail-dialog" class="wide-dialog" aria-labelledby="detail-title">
+    <div class="dialog-content">
+      <div class="dialog-heading">
+        <div><p id="detail-kicker" class="eyebrow"></p><h2 id="detail-title"></h2></div>
+        <button class="icon-button" type="button" data-close aria-label="Close details"><svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg></button>
+      </div>
+      <div id="detail-content"></div>
+      <div class="dialog-actions"><button class="button solid" type="button" data-close>Done</button></div>
+    </div>
+  </dialog>
+
+  <div id="announcement" class="visually-hidden" role="status" aria-live="polite"></div>
+  <div id="toast" class="toast" aria-hidden="true" hidden></div>
+</body>
+</html>

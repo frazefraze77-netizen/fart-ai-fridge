@@ -1,0 +1,16 @@
+[build]
+  publish = "public"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/vision/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
